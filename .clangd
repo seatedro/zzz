@@ -1,0 +1,13 @@
+CompileFlags:
+  Add: [-std=c++20, -Wall, -Wextra, -Ivendor/raylib/src]
+
+Diagnostics:
+  UnusedIncludes: Strict
+
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+
+Completion:
+  AllScopes: Yes

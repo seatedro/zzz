@@ -1,0 +1,6 @@
+# infinite terrain gen using c++
+
+```bash
+git clone --recursive https://github.com/seatedro/zzz.git
+./build.sh
+```

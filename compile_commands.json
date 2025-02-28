@@ -1,0 +1,7 @@
+[
+  {
+    "directory": "${workspaceFolder}",
+    "command": "clang++ -std=c++17 -Wall -Wextra -Ivendor/raylib/src",
+    "file": "main.cxx"
+  }
+]
