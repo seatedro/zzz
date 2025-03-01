@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "raylib.h"
+#include "raymath.h"
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
@@ -122,8 +123,8 @@ Color getTerrainColor(float height)
         return WHITE; // Snow peaks
 }
 
-const int CHUNK_SIZE = 16;
-const int RENDER_DISTANCE = 3;
+const int CHUNK_SIZE = 32;
+const int RENDER_DISTANCE = 10;
 constexpr int RESOLUTION = CHUNK_SIZE + 1;
 constexpr int VERT_COUNT = RESOLUTION * RESOLUTION;
 // i have no idea what i'm doing
@@ -220,6 +221,7 @@ int main()
     float lacunarity = 2.0f;
     bool regenerate = false;
     bool show_ui = false;
+    float camera_speed = 1.0f;
 
     SetTargetFPS(60);
     DisableCursor();
@@ -228,7 +230,21 @@ int main()
     while (!WindowShouldClose()) {
         if (!show_ui) {
             GuiLock();
-            UpdateCamera(&camera, CAMERA_FIRST_PERSON);
+            UpdateCameraPro(&camera,
+                (Vector3) {
+                    (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) * camera_speed - // Move forward-backward
+                        (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) * camera_speed,
+                    (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) * camera_speed - // Move right-left
+                        (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) * camera_speed,
+                    (IsKeyDown(KEY_SPACE)) * camera_speed - // Move up
+                        (IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) * camera_speed, // move down
+                },
+                (Vector3) {
+                    GetMouseDelta().x * 0.05f, // Rotation: yaw
+                    GetMouseDelta().y * 0.05f, // Rotation: pitch
+                    0.0f // Rotation: roll
+                },
+                GetMouseWheelMove() * 2.0f);
         }
 
         int cam_chunk_x = (int)floor(camera.position.x / CHUNK_SIZE);
